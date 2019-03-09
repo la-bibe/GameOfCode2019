@@ -196,6 +196,10 @@ class Tournament
             'tournament' => $this->getData(),
         ]);
         $this->sendMessageTo($id, $event->getRawJson());
+        if ($this->state != self::$STATE_VOTE)
+            return;
+        $event = new SocketEvent('propositions', $this->game->getPropositionsVoteData());
+        $this->sendMessageTo($id, $event->getRawJson());
     }
 
     private function endOfTournament()
