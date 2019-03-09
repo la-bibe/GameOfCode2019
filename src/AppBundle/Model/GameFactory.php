@@ -9,12 +9,14 @@
 namespace AppBundle\Model;
 
 
+use AppBundle\Model\Games\BoardGame;
 use AppBundle\Model\Games\FashionGame;
 
 class GameFactory
 {
     private static $GAMES = [
-        'fashion'
+        'fashion',
+        'board',
     ];
 
     private static function getGame(string $name, Tournament $tournament): ?AGame
@@ -22,6 +24,8 @@ class GameFactory
         switch ($name) {
             case 'fashion':
                 return new FashionGame($tournament);
+            case 'board':
+                return new BoardGame($tournament);
             default:
                 return null;
         }

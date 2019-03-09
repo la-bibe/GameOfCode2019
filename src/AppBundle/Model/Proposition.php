@@ -33,7 +33,7 @@ class Proposition
 
     public function __construct(Client $player, array $proposition)
     {
-        $this->Client = $player;
+        $this->player = $player;
         $this->proposition = $proposition;
         $this->votes = 0;
     }

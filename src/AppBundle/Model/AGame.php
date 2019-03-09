@@ -30,6 +30,7 @@ abstract class AGame
     {
         $this->tournament = $tournament;
         $this->seed = static::generateSeed();
+        $this->propositions = [];
     }
 
     abstract protected function checkPropositionData(array $data): bool;
@@ -86,7 +87,7 @@ abstract class AGame
         $data = [];
         foreach ($this->propositions as $proposition)
             $data[] = $proposition->getResultData();
-        usort($data, ['Proposition', 'compare']);
+        usort($data, ['AppBundle\Model\Proposition', 'compare']);
         return $data;
     }
 
@@ -103,5 +104,10 @@ abstract class AGame
     public function vote(int $id)
     {
         $this->propositions[$id]->addVote();
+    }
+
+    public function getProposition(int $id)
+    {
+        return $this->propositions[$id];
     }
 }
