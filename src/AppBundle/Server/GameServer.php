@@ -21,9 +21,8 @@ class GameServer implements MessageComponentInterface
 
     public function __construct()
     {
-        $this->tournament = new Tournament();
+        $this->tournament = Tournament::getInstance();
     }
-
 
     public function onOpen(ConnectionInterface $connection)
     {
@@ -35,14 +34,18 @@ class GameServer implements MessageComponentInterface
         $this->tournament->close($connection);
     }
 
-    public function onError(ConnectionInterface $conn, \Exception $e)
+    public function onError(ConnectionInterface $connection, \Exception $e)
     {
-//        $conn->send('An error has occurred: '.$e->getMessage());
-//        $conn->close();
+        $this->tournament->error($connection, $e);
     }
 
     public function onMessage(ConnectionInterface $connection, $message)
     {
         $this->tournament->handleMessage($connection, $message);
+    }
+
+    public function getTournament()
+    {
+        return $this->tournament;
     }
 }

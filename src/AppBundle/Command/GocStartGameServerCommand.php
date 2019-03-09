@@ -2,6 +2,7 @@
 
 namespace AppBundle\Command;
 
+use AppBundle\Model\Tournament;
 use AppBundle\Server\GameServer;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
@@ -29,6 +30,8 @@ class GocStartGameServerCommand extends ContainerAwareCommand
             ),
             8080,
             '192.168.43.78');
+        $tournament = Tournament::getInstance();
+        $server->loop->addPeriodicTimer(1, [$tournament, 'update']);
         $server->run();
     }
 }

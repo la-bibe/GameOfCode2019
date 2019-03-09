@@ -24,9 +24,9 @@ class SocketEvent
 
     public function __construct(string $raw = null, array $payload = null)
     {
-        if ($raw == null)
+        if (is_null($raw))
             return;
-        if ($payload == null)
+        if (is_null($payload))
             $this->setRawJson($raw);
         else {
             $this->setType($raw);

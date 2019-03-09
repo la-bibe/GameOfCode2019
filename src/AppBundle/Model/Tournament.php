@@ -27,6 +27,11 @@ class Tournament
     public static $LOG_LEVEL_FATAL = 5;
 
     /**
+     * @var null | Tournament
+     */
+    private static $instance = null;
+
+    /**
      * @var AGame
      */
     private $game;
@@ -71,10 +76,26 @@ class Tournament
      */
     private $logLevel;
 
-    public function __construct(int $size = 8, int $rounds = 3, int $logLevel = null)
+    /**
+     * @var int
+     */
+    private $timeLeft;
+
+    /**
+     * @var int
+     */
+    private $timePerGame;
+
+    /**
+     * @var int
+     */
+    private $timeToVote;
+
+    public function __construct(int $size = 1, int $rounds = 3, int $logLevel = null, int $timePerGame = 30,
+                                int $timeToVote = 10)
     {
         if (is_null($logLevel))
-            $logLevel = self::$LOG_LEVEL_INFO;
+            $logLevel = self::$LOG_LEVEL_TRACE;
         $this->size = $size;
         $this->players = [];
         $this->voters = [];
@@ -83,6 +104,16 @@ class Tournament
         $this->rounds = $rounds;
         $this->currentRound = 0;
         $this->logLevel = $logLevel;
+        $this->timePerGame = $timePerGame;
+        $this->timeToVote = $timeToVote;
+    }
+
+    public static function getInstance(int $size = 1, int $rounds = 3, int $logLevel = null, int $timePerGame = 30,
+                                       int $timeToVote = 10)
+    {
+        if (is_null(self::$instance))
+            self::$instance = new Tournament($size, $rounds, $logLevel, $timePerGame, $timeToVote);
+        return self::$instance;
     }
 
     private function log(string $text, int $logLevel = null)
@@ -117,7 +148,7 @@ class Tournament
     private function notify(SocketEvent $event)
     {
         $raw = $event->getRawJson();
-        $this->log("Sending \"$raw\" to all clients");
+        $this->log("Sending \"$raw\" to all clients", self::$LOG_LEVEL_TRACE);
         foreach ($this->players as $player)
             $player->send($raw);
         foreach ($this->voters as $voter)
@@ -146,7 +177,7 @@ class Tournament
 
     private function sendMessageTo(int $id, string $message): bool
     {
-        $this->log("Sending \"$message\" to $id");
+        $this->log("Sending \"$message\" to $id", self::$LOG_LEVEL_TRACE);
         if ($this->isClient($id))
             $this->clients[$id]->send($message);
         else if ($this->isPlayer($id))
@@ -190,6 +221,7 @@ class Tournament
                 $this->log("Launching new game (round $this->currentRound / $this->rounds)", self::$LOG_LEVEL_INFO);
                 $this->notify(new SocketEvent('launchGame', $this->game->getData()));
                 $this->changeState(self::$STATE_IN_GAME);
+                $this->timeLeft = $this->timePerGame;
             }
         }
     }
@@ -224,19 +256,13 @@ class Tournament
             'size' => $this->size,
             'state' => $this->getState(),
             'game' => [is_null($this->game) ? null : $this->game->getData()],
-            'players' => [
-                'size' => count($this->players),
-                'data' => [],
-            ],
-            'voters' => [
-                'size' => count($this->voters),
-                'data' => [],
-            ],
+            'players' => [],
+            'voters' => [],
         ];
         foreach ($this->players as $player)
-            $data['players']['data'][] = $player->getData();
+            $data['players'][] = $player->getData();
         foreach ($this->voters as $voter)
-            $data['voters']['data'][] = $voter->getData();
+            $data['voters'][] = $voter->getData();
 
         return $data;
     }
@@ -379,7 +405,7 @@ class Tournament
         $players = [];
         foreach ($this->players as $player)
             $players[] = $player->getData();
-        usort($players, ['Client', 'compare']);
+        usort($players, ['AppBundle\Model\Client', 'compare']);
         $this->notify(new SocketEvent($end ? 'finalPlayerRanking' : 'updatePlayerRanking', $players));
     }
 
@@ -471,7 +497,7 @@ class Tournament
     private function changeState(int $state)
     {
         $this->state = $state;
-        $this->notify(new SocketEvent('changeState', ['state' => $this->state]));
+        $this->notify(new SocketEvent('changeState', ['state' => $this->getState()]));
     }
 
     public function handleMessage(ConnectionInterface $connection, string $message)
@@ -480,13 +506,13 @@ class Tournament
         try {
             $event = new SocketEvent($message);
         } catch (\InvalidArgumentException $e) {
-            $this->log("Got invalid event from $id");
+            $this->log("Received invalid event from $id", self::$LOG_LEVEL_TRACE);
             $error = new SocketErrorEvent($e->getMessage());
             $this->sendMessageTo($id, $error->getRawJson());
 
             return;
         }
-        $this->log("Got \"$message\" from $id");
+        $this->log("Received \"$message\" from $id", self::$LOG_LEVEL_TRACE);
         if ($this->isClient($id))
             $this->handleClientEvent($id, $event);
         else
@@ -511,6 +537,8 @@ class Tournament
         $event = new SocketEvent('playerLeave', $this->players[$id]->getData());
         unset($this->players[$id]);
         $this->notify($event);
+        if (count($this->players) == 0)
+            $this->endOfTournament();
     }
 
     private function dropVoter(int $id)
@@ -534,6 +562,7 @@ class Tournament
 
     private function reset()
     {
+        $this->log("Resetting tournament", self::$LOG_LEVEL_TRACE);
         $this->notify(new SocketEvent('resetClient', []));
         $this->changeState(static::$STATE_LOUNGE);
         foreach ($this->players as $id => $player)
@@ -545,6 +574,26 @@ class Tournament
         foreach ($this->clients as $client)
             $client->reset();
         $this->currentRound = 0;
+        $this->game = null;
+    }
+
+    public function error(ConnectionInterface $connection, \Exception $e)
+    {
+        $this->log($e->getMessage(), self::$LOG_LEVEL_WARNING);
+    }
+
+    public function notifyTimeLeft()
+    {
+        $this->notify(new SocketEvent('timeLeft', ['value' => $this->timeLeft]));
+    }
+
+    public function update()
+    {
+        if ($this->state != self::$STATE_LOUNGE) {
+            $this->timeLeft -= 1;
+            $this->notifyTimeLeft();
+        }
+        // TODO
     }
 
     // TODO Log everything + time to play and vote + adjust points ?
