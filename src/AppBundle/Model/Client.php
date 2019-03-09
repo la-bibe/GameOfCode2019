@@ -53,11 +53,6 @@ class Client
     private $connection;
 
     /**
-     * @var null | AGame
-     */
-    private $game;
-
-    /**
      * @var string
      */
     private $name;
@@ -75,7 +70,6 @@ class Client
     public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
-        $this->game = null;
         $this->name = static::generateRandomName();
         $this->actionDone = false;
         $this->points = 0;
@@ -111,12 +105,6 @@ class Client
     public function getConnection(): ConnectionInterface
     {
         return $this->connection;
-    }
-
-    public function setGame(AGame $game)
-    {
-        $this->game = $game;
-//        $this->send($this->game->getData()); TODO
     }
 
     public function getData()

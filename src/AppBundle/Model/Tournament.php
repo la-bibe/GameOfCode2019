@@ -14,9 +14,7 @@ use Ratchet\ConnectionInterface;
 class Tournament
 {
     public static $STATE_LOUNGE = 0;
-
     public static $STATE_IN_GAME = 1;
-
     public static $STATE_VOTE = 2;
 
     public static $LOG_LEVEL_TRACE = 0;
@@ -414,11 +412,8 @@ class Tournament
         return (4 - $rank) * 5;
     }
 
-    private function checkEndOfVote()
+    private function doEndOfVote()
     {
-        foreach ($this->voters as $voter)
-            if ($voter->canAct())
-                return;
         $results = $this->game->getVoteResults();
         $this->notify(new SocketEvent('voteResult', $results));
         $i = 0;
@@ -429,6 +424,14 @@ class Tournament
                 $result->getPlayer()->addPoints($this->getWonPointsFromRank($i++));
         $this->notifyUpdatePlayersRanking();
         $this->launchNextGame();
+    }
+
+    private function checkEndOfVote()
+    {
+        foreach ($this->voters as $voter)
+            if ($voter->canAct())
+                return;
+        $this->doEndOfVote();
     }
 
     private function handleVoterEvent(int $id, SocketEvent $event)
@@ -528,6 +531,7 @@ class Tournament
     {
         $this->changeState(self::$STATE_VOTE);
         $this->notify(new SocketEvent('propositions', $this->game->getPropositionsVoteData()));
+        $this->timeLeft = $this->timeToVote;
     }
 
     private function dropPlayer(int $id)
@@ -589,12 +593,17 @@ class Tournament
 
     public function update()
     {
-        if ($this->state != self::$STATE_LOUNGE) {
-            $this->timeLeft -= 1;
-            $this->notifyTimeLeft();
-        }
-        // TODO
+        if ($this->state == self::$STATE_LOUNGE)
+            return;
+        $this->timeLeft -= 1;
+        $this->notifyTimeLeft();
+        if ($this->timeLeft > 0)
+            return;
+        if ($this->state == self::$STATE_IN_GAME)
+            $this->game->finishPropositions();
+        elseif ($this->state == self::$STATE_VOTE)
+            $this->doEndOfVote();
     }
 
-    // TODO Log everything + time to play and vote + adjust points ?
+    // TODO Log everything + adjust points ?
 }

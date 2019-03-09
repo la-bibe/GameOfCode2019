@@ -43,7 +43,7 @@ abstract class AGame
         return $this->seed;
     }
 
-    private function finishPropositions()
+    public function finishPropositions()
     {
         shuffle($this->propositions);
         for ($i = 0; $i < count($this->propositions); $i++)
