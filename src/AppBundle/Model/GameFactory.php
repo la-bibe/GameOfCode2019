@@ -16,9 +16,9 @@ use AppBundle\Model\Games\MountainGame;
 class GameFactory
 {
     private static $GAMES = [
-        'raclette',
         'fashion',
         'board',
+        'raclette',
     ];
 
     private static function getGame(string $name, Tournament $tournament): ?AGame
