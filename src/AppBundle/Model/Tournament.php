@@ -10,7 +10,6 @@ namespace AppBundle\Model;
 
 
 use Ratchet\ConnectionInterface;
-use Symfony\Bundle\FrameworkBundle\Tests\Functional\Bundle\TestBundle\Controller\FragmentController;
 
 class Tournament
 {
@@ -48,13 +47,19 @@ class Tournament
      */
     private $state;
 
-    public function __construct(int $size = 8)
+    /**
+     * @var int
+     */
+    private $rounds;
+
+    public function __construct(int $size = 8, int $rounds = 3)
     {
         $this->size = $size;
         $this->players = [];
         $this->voters = [];
         $this->clients = [];
         $this->state = self::$STATE_LOUNGE;
+        $this->rounds = $rounds;
     }
 
     private function notify(SocketEvent $event)
@@ -133,11 +138,11 @@ class Tournament
     private function resetAllClientsActions()
     {
         foreach ($this->clients as $client)
-            $client->reset();
+            $client->resetAction();
         foreach ($this->players as $player)
-            $player->reset();
+            $player->resetAction();
         foreach ($this->voters as $voter)
-            $voter->reset();
+            $voter->resetAction();
     }
 
     public function getData(): array
@@ -295,6 +300,12 @@ class Tournament
         $this->sendMessageTo($id, $error->getRawJson());
     }
 
+    private function getWonPointsFromRank(int $rank)
+    {
+        // TODO
+        return (4 - $rank) * 5;
+    }
+
     private function checkEndOfVote()
     {
         foreach ($this->voters as $voter)
@@ -302,7 +313,12 @@ class Tournament
                 return;
         $results = $this->game->getVoteResults();
         $this->notify(new SocketEvent('voteResult', $results));
-        // TODO win player
+        $i = 0;
+        foreach ($results as $result)
+            if ($i > 4)
+                break;
+            elseif ($result instanceof Proposition)
+                $result->getPlayer()->addPoints($this->getWonPointsFromRank($i++));
         $this->launchNextGame();
     }
 
@@ -392,9 +408,6 @@ class Tournament
             $this->handleLoggedClientEvent($id, $event);
     }
 
-    /**
-     * @return int
-     */
     public function getSize(): int
     {
         return $this->size;
@@ -433,5 +446,10 @@ class Tournament
             $this->dropVoter($id);
     }
 
-    // TODO Log everything + time to play + vote
+    private function reset()
+    {
+        // TODO
+    }
+
+    // TODO Log everything + time to play and vote
 }

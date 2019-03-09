@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1233b6e7-195d-4081-86e9-75e58b1129ca" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AppBundle/Model/AGame.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/AppBundle/Model/AGame.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AppBundle/Model/Client.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/AppBundle/Model/Client.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AppBundle/Model/Proposition.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/AppBundle/Model/Proposition.php" afterDir="false" />
@@ -21,18 +22,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/Tournament.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="655">
-              <caret line="408" column="39" lean-forward="true" selection-start-line="408" selection-start-column="39" selection-end-line="408" selection-end-column="39" />
+            <state relative-caret-position="180">
+              <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
               <folding>
                 <element signature="e#6#86#0#PHP" expanded="true" />
-                <element signature="e#117#149#0#PHP" expanded="true" />
                 <element signature="e#285#314#0#PHP" />
                 <element signature="e#201#228#0#PHP" />
                 <element signature="e#394#426#0#PHP" />
                 <element signature="e#454#486#0#PHP" />
                 <element signature="e#513#545#0#PHP" />
                 <element signature="e#482#509#0#PHP" />
-                <element signature="e#477#668#0#PHP" />
+                <element signature="e#758#785#0#PHP" />
                 <element signature="e#842#1185#0#PHP" />
                 <element signature="e#1191#1358#0#PHP" />
                 <element signature="e#1364#1499#0#PHP" />
@@ -54,12 +54,12 @@
                 <element signature="e#4969#5134#0#PHP" />
                 <element signature="e#5140#5629#0#PHP" />
                 <element signature="e#5635#5943#0#PHP" />
+                <element signature="e#7895#7935#0#PHP" />
                 <element signature="e#6105#7319#0#PHP" />
                 <element signature="e#8075#8587#0#PHP" />
                 <element signature="e#6428#6504#0#PHP" />
                 <element signature="e#8953#9118#0#PHP" />
                 <element signature="e#6259#7011#0#PHP" />
-                <element signature="e#7017#7047#0#PHP" />
                 <element signature="e#7052#7122#0#PHP" />
                 <element signature="e#6997#7062#0#PHP" />
                 <element signature="e#9999#10304#0#PHP" />
@@ -73,16 +73,49 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/AGame.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="775">
-              <caret line="94" lean-forward="true" selection-start-line="94" selection-end-line="94" />
+            <state relative-caret-position="655">
+              <caret line="79" column="21" lean-forward="true" selection-start-line="79" selection-start-column="21" selection-end-line="79" selection-end-column="21" />
               <folding>
                 <element signature="e#278#330#0#PHP" />
                 <element signature="e#380#412#0#PHP" />
                 <element signature="e#421#557#0#PHP" />
                 <element signature="e#1385#1430#0#PHP" />
                 <element signature="e#897#951#0#PHP" />
-                <element signature="e#1519#1558#0#PHP" />
                 <element signature="e#1592#1628#0#PHP" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/Proposition.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="835">
+              <caret line="133" column="1" lean-forward="true" selection-start-line="133" selection-start-column="1" selection-end-line="133" selection-end-column="1" />
+              <folding>
+                <element signature="e#6#86#0#PHP" expanded="true" />
+                <element signature="e#141#171#0#PHP" />
+                <element signature="e#198#227#0#PHP" />
+                <element signature="e#259#286#0#PHP" />
+                <element signature="e#309#336#0#PHP" />
+                <element signature="e#362#539#0#PHP" />
+                <element signature="e#545#578#0#PHP" />
+                <element signature="e#583#660#0#PHP" />
+                <element signature="e#666#706#0#PHP" />
+                <element signature="e#711#803#0#PHP" />
+                <element signature="e#809#841#0#PHP" />
+                <element signature="e#846#932#0#PHP" />
+                <element signature="e#938#982#0#PHP" />
+                <element signature="e#987#1098#0#PHP" />
+                <element signature="e#1104#1136#0#PHP" />
+                <element signature="e#1141#1202#0#PHP" />
+                <element signature="e#1208#1243#0#PHP" />
+                <element signature="e#1248#1317#0#PHP" />
+                <element signature="e#1323#1353#0#PHP" />
+                <element signature="e#1358#1430#0#PHP" />
+                <element signature="e#1436#1472#0#PHP" />
+                <element signature="e#1477#1562#0#PHP" />
+                <element signature="e#1568#1638#0#PHP" />
               </folding>
             </state>
           </provider>
@@ -91,8 +124,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/Client.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1470">
-              <caret line="103" column="5" selection-start-line="103" selection-start-column="5" selection-end-line="103" selection-end-column="5" />
+            <state relative-caret-position="805">
+              <caret line="123" column="33" selection-start-line="123" selection-start-column="33" selection-end-line="123" selection-end-column="33" />
+              <folding>
+                <element signature="e#6#86#0#PHP" expanded="true" />
+                <element signature="e#170#213#0#PHP" />
+                <element signature="e#244#280#0#PHP" />
+                <element signature="e#305#335#0#PHP" />
+                <element signature="e#360#388#0#PHP" />
+                <element signature="e#423#450#0#PHP" />
+                <element signature="e#613#700#0#PHP" />
+                <element signature="e#706#792#0#PHP" />
+                <element signature="e#798#981#0#PHP" />
+                <element signature="e#987#1080#0#PHP" />
+                <element signature="e#1086#1184#0#PHP" />
+                <element signature="e#1190#1319#0#PHP" />
+                <element signature="e#1325#1466#0#PHP" />
+                <element signature="e#1472#1537#0#PHP" />
+                <element signature="e#1662#1690#0#PHP" />
+                <element signature="e#1739#1770#0#PHP" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -134,10 +185,10 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Model/Player.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Model/AClient.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Model/SocketEvent.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Model/Client.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Model/Proposition.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Model/Tournament.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Model/AGame.php" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Model/Client.php" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Model/Tournament.php" />
       </list>
     </option>
   </component>
@@ -311,12 +362,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1552069164121</updated>
-      <workItem from="1552069165269" duration="29325000" />
+      <workItem from="1552069165269" duration="30125000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="29325000" />
+    <option name="totallyTimeSpent" value="30125000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="43" y="27" width="1877" height="1053" extended-state="6" />
@@ -531,10 +582,35 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/Client.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="805">
+          <caret line="123" column="33" selection-start-line="123" selection-start-column="33" selection-end-line="123" selection-end-column="33" />
+          <folding>
+            <element signature="e#6#86#0#PHP" expanded="true" />
+            <element signature="e#170#213#0#PHP" />
+            <element signature="e#244#280#0#PHP" />
+            <element signature="e#305#335#0#PHP" />
+            <element signature="e#360#388#0#PHP" />
+            <element signature="e#423#450#0#PHP" />
+            <element signature="e#613#700#0#PHP" />
+            <element signature="e#706#792#0#PHP" />
+            <element signature="e#798#981#0#PHP" />
+            <element signature="e#987#1080#0#PHP" />
+            <element signature="e#1086#1184#0#PHP" />
+            <element signature="e#1190#1319#0#PHP" />
+            <element signature="e#1325#1466#0#PHP" />
+            <element signature="e#1472#1537#0#PHP" />
+            <element signature="e#1662#1690#0#PHP" />
+            <element signature="e#1739#1770#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/Proposition.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="715">
-          <caret line="109" column="33" selection-start-line="109" selection-start-column="33" selection-end-line="109" selection-end-column="33" />
+        <state relative-caret-position="835">
+          <caret line="133" column="1" lean-forward="true" selection-start-line="133" selection-start-column="1" selection-end-line="133" selection-end-column="1" />
           <folding>
             <element signature="e#6#86#0#PHP" expanded="true" />
             <element signature="e#141#171#0#PHP" />
@@ -559,30 +635,20 @@
             <element signature="e#1436#1472#0#PHP" />
             <element signature="e#1477#1562#0#PHP" />
             <element signature="e#1568#1638#0#PHP" />
-            <element signature="e#1648#1684#0#PHP" />
-            <element signature="e#1809#1968#0#PHP" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/Client.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1470">
-          <caret line="103" column="5" selection-start-line="103" selection-start-column="5" selection-end-line="103" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/AGame.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="775">
-          <caret line="94" lean-forward="true" selection-start-line="94" selection-end-line="94" />
+        <state relative-caret-position="655">
+          <caret line="79" column="21" lean-forward="true" selection-start-line="79" selection-start-column="21" selection-end-line="79" selection-end-column="21" />
           <folding>
             <element signature="e#278#330#0#PHP" />
             <element signature="e#380#412#0#PHP" />
             <element signature="e#421#557#0#PHP" />
             <element signature="e#1385#1430#0#PHP" />
             <element signature="e#897#951#0#PHP" />
-            <element signature="e#1519#1558#0#PHP" />
             <element signature="e#1592#1628#0#PHP" />
           </folding>
         </state>
@@ -590,18 +656,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/Tournament.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="655">
-          <caret line="408" column="39" lean-forward="true" selection-start-line="408" selection-start-column="39" selection-end-line="408" selection-end-column="39" />
+        <state relative-caret-position="180">
+          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
           <folding>
             <element signature="e#6#86#0#PHP" expanded="true" />
-            <element signature="e#117#149#0#PHP" expanded="true" />
             <element signature="e#285#314#0#PHP" />
             <element signature="e#201#228#0#PHP" />
             <element signature="e#394#426#0#PHP" />
             <element signature="e#454#486#0#PHP" />
             <element signature="e#513#545#0#PHP" />
             <element signature="e#482#509#0#PHP" />
-            <element signature="e#477#668#0#PHP" />
+            <element signature="e#758#785#0#PHP" />
             <element signature="e#842#1185#0#PHP" />
             <element signature="e#1191#1358#0#PHP" />
             <element signature="e#1364#1499#0#PHP" />
@@ -623,12 +688,12 @@
             <element signature="e#4969#5134#0#PHP" />
             <element signature="e#5140#5629#0#PHP" />
             <element signature="e#5635#5943#0#PHP" />
+            <element signature="e#7895#7935#0#PHP" />
             <element signature="e#6105#7319#0#PHP" />
             <element signature="e#8075#8587#0#PHP" />
             <element signature="e#6428#6504#0#PHP" />
             <element signature="e#8953#9118#0#PHP" />
             <element signature="e#6259#7011#0#PHP" />
-            <element signature="e#7017#7047#0#PHP" />
             <element signature="e#7052#7122#0#PHP" />
             <element signature="e#6997#7062#0#PHP" />
             <element signature="e#9999#10304#0#PHP" />

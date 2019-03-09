@@ -124,4 +124,11 @@ class Proposition
             'player' => $this->getPlayer()->getData(),
         ];
     }
+
+    public static function compare(Proposition $a, Proposition $b)
+    {
+        if ($a->getVotes() == $b->getVotes())
+            return 0;
+        return $a->getVotes() > $b->getVotes() ? 1 : -1;
+    }
 }

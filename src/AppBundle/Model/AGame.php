@@ -9,6 +9,8 @@
 namespace AppBundle\Model;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 abstract class AGame
 {
     protected static $name = '';
@@ -74,6 +76,7 @@ abstract class AGame
         $data = [];
         foreach ($this->propositions as $proposition)
             $data[] = $proposition->getResultData();
+        usort($data, ['Proposition', 'compare']);
         return $data;
     }
 

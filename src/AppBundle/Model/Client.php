@@ -33,12 +33,18 @@ class Client
      */
     private $actionDone;
 
+    /**
+     * @var int
+     */
+    private $points;
+
     public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
         $this->game = null;
         $this->name = $this->generateRandomName();
         $this->actionDone = false;
+        $this->points = 0;
     }
 
     private function generateRandomName()
@@ -88,9 +94,14 @@ class Client
         return $this->name;
     }
 
-    public function reset()
+    public function resetAction()
     {
         $this->actionDone = false;
+    }
+
+    public function reset()
+    {
+        $this->points = 0;
     }
 
     public function act()
@@ -101,5 +112,15 @@ class Client
     public function canAct()
     {
         return !$this->actionDone;
+    }
+
+    public function getPoint()
+    {
+        return $this->points;
+    }
+
+    public function addPoints(int $points)
+    {
+        $this->points += $points;
     }
 }
