@@ -20,7 +20,7 @@ class MountainGame extends AGame
 
     protected static function getName(): string
     {
-        return 'mountain';
+        return 'raclette';
     }
 
     protected static function generateSeed(): array

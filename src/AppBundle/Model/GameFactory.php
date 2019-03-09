@@ -16,7 +16,7 @@ use AppBundle\Model\Games\MountainGame;
 class GameFactory
 {
     private static $GAMES = [
-        'mountain',
+        'raclette',
         'fashion',
         'board',
     ];
@@ -28,7 +28,7 @@ class GameFactory
                 return new FashionGame($tournament);
             case 'board':
                 return new BoardGame($tournament);
-            case 'mountain':
+            case 'raclette':
                 return new MountainGame($tournament);
             default:
                 return null;

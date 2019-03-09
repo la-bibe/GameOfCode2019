@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1233b6e7-195d-4081-86e9-75e58b1129ca" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/src/AppBundle/Model/GameFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/AppBundle/Model/GameFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AppBundle/Model/Games/MountainGame.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/AppBundle/Model/Games/MountainGame.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -157,20 +158,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/Games/MountainGame.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="375">
-              <caret line="30" selection-start-line="30" selection-end-line="30" />
+              <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/GameFactory.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="21" column="6" lean-forward="true" selection-start-line="21" selection-start-column="6" selection-end-line="21" selection-end-column="6" />
+            <state relative-caret-position="390">
+              <caret line="31" column="35" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
               <folding>
                 <element signature="e#117#153#0#PHP" expanded="true" />
               </folding>
@@ -238,11 +239,11 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Model/Proposition.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Model/Client.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Model/Games/BoardGame.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Model/Games/MountainGame.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Model/Tournament.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Command/GocStartGameServerCommand.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Model/AGame.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Model/GameFactory.php" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Model/Games/MountainGame.php" />
       </list>
     </option>
   </component>
@@ -433,12 +434,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1552069164121</updated>
-      <workItem from="1552069165269" duration="56912000" />
+      <workItem from="1552069165269" duration="57235000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="56912000" />
+    <option name="totallyTimeSpent" value="57235000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="43" y="27" width="1877" height="1053" extended-state="6" />
@@ -753,13 +754,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/Games/MountainGame.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="30" selection-start-line="30" selection-end-line="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/cboden/ratchet/src/Ratchet/WebSocket/WsServer.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-35">
@@ -889,11 +883,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/GameFactory.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="21" column="6" lean-forward="true" selection-start-line="21" selection-start-column="6" selection-end-line="21" selection-end-column="6" />
+        <state relative-caret-position="390">
+          <caret line="31" column="35" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
           <folding>
             <element signature="e#117#153#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/Games/MountainGame.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="30" lean-forward="true" selection-start-line="30" selection-end-line="30" />
         </state>
       </provider>
     </entry>
