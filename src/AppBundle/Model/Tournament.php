@@ -254,7 +254,7 @@ class Tournament
         $data = [
             'size' => $this->size,
             'state' => $this->getState(),
-            'game' => [is_null($this->game) ? null : $this->game->getData()],
+            'game' => is_null($this->game) ? null : $this->game->getData(),
             'players' => [],
             'voters' => [],
         ];

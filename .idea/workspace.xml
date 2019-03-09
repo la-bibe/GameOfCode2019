@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1233b6e7-195d-4081-86e9-75e58b1129ca" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/AppBundle/Command/GocStartGameServerCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/AppBundle/Command/GocStartGameServerCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AppBundle/Model/Tournament.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/AppBundle/Model/Tournament.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,7 +28,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Command/GocStartGameServerCommand.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="615">
@@ -40,11 +40,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/Tournament.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="108" column="27" selection-start-line="108" selection-start-column="27" selection-end-line="108" selection-end-column="27" />
+            <state relative-caret-position="655">
+              <caret line="259" column="10" lean-forward="true" selection-start-line="259" selection-start-column="10" selection-end-line="259" selection-end-column="10" />
               <folding>
                 <element signature="e#6#86#0#PHP" expanded="true" />
                 <element signature="e#529#570#0#PHP" />
@@ -73,7 +73,6 @@
                 <element signature="e#4404#5198#0#PHP" />
                 <element signature="e#4975#5284#0#PHP" />
                 <element signature="e#5290#5580#0#PHP" />
-                <element signature="e#5586#6084#0#PHP" />
                 <element signature="e#6090#6185#0#PHP" />
                 <element signature="e#6191#6262#0#PHP" />
                 <element signature="e#6268#6337#0#PHP" />
@@ -88,16 +87,12 @@
                 <element signature="e#9433#11037#0#PHP" />
                 <element signature="e#10160#10513#0#PHP" />
                 <element signature="e#10519#10611#0#PHP" />
-                <element signature="e#11441#11478#0#PHP" />
-                <element signature="e#10617#11191#0#PHP" />
-                <element signature="e#12810#13691#0#PHP" />
                 <element signature="e#13697#14468#0#PHP" />
                 <element signature="e#12480#13115#0#PHP" />
                 <element signature="e#13121#13475#0#PHP" />
                 <element signature="e#13481#13651#0#PHP" />
                 <element signature="e#13657#14379#0#PHP" />
                 <element signature="e#14385#14455#0#PHP" />
-                <element signature="e#14461#14652#0#PHP" />
                 <element signature="e#14658#15025#0#PHP" />
                 <element signature="e#15031#15223#0#PHP" />
                 <element signature="e#15229#15615#0#PHP" />
@@ -188,8 +183,8 @@
         <option value="$PROJECT_DIR$/src/AppBundle/Model/Proposition.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Model/Client.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Model/AGame.php" />
-        <option value="$PROJECT_DIR$/src/AppBundle/Model/Tournament.php" />
         <option value="$PROJECT_DIR$/src/AppBundle/Command/GocStartGameServerCommand.php" />
+        <option value="$PROJECT_DIR$/src/AppBundle/Model/Tournament.php" />
       </list>
     </option>
   </component>
@@ -380,12 +375,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1552069164121</updated>
-      <workItem from="1552069165269" duration="45405000" />
+      <workItem from="1552069165269" duration="46343000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45405000" />
+    <option name="totallyTimeSpent" value="46343000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="43" y="27" width="1877" height="1053" extended-state="6" />
@@ -688,17 +683,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Server/GameServer.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
-          <folding>
-            <element signature="e#6#86#0#PHP" expanded="true" />
-            <element signature="e#117#148#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/GameFactory.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -771,10 +755,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Command/GocStartGameServerCommand.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="615">
+          <caret line="41" column="1" lean-forward="true" selection-start-line="41" selection-start-column="1" selection-end-line="41" selection-end-column="1" />
+          <folding>
+            <element signature="e#37#68#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppBundle/Server/GameServer.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
+          <folding>
+            <element signature="e#6#86#0#PHP" expanded="true" />
+            <element signature="e#117#148#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/AppBundle/Model/Tournament.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="108" column="27" selection-start-line="108" selection-start-column="27" selection-end-line="108" selection-end-column="27" />
+        <state relative-caret-position="655">
+          <caret line="259" column="10" lean-forward="true" selection-start-line="259" selection-start-column="10" selection-end-line="259" selection-end-column="10" />
           <folding>
             <element signature="e#6#86#0#PHP" expanded="true" />
             <element signature="e#529#570#0#PHP" />
@@ -803,7 +808,6 @@
             <element signature="e#4404#5198#0#PHP" />
             <element signature="e#4975#5284#0#PHP" />
             <element signature="e#5290#5580#0#PHP" />
-            <element signature="e#5586#6084#0#PHP" />
             <element signature="e#6090#6185#0#PHP" />
             <element signature="e#6191#6262#0#PHP" />
             <element signature="e#6268#6337#0#PHP" />
@@ -818,16 +822,12 @@
             <element signature="e#9433#11037#0#PHP" />
             <element signature="e#10160#10513#0#PHP" />
             <element signature="e#10519#10611#0#PHP" />
-            <element signature="e#11441#11478#0#PHP" />
-            <element signature="e#10617#11191#0#PHP" />
-            <element signature="e#12810#13691#0#PHP" />
             <element signature="e#13697#14468#0#PHP" />
             <element signature="e#12480#13115#0#PHP" />
             <element signature="e#13121#13475#0#PHP" />
             <element signature="e#13481#13651#0#PHP" />
             <element signature="e#13657#14379#0#PHP" />
             <element signature="e#14385#14455#0#PHP" />
-            <element signature="e#14461#14652#0#PHP" />
             <element signature="e#14658#15025#0#PHP" />
             <element signature="e#15031#15223#0#PHP" />
             <element signature="e#15229#15615#0#PHP" />
@@ -835,16 +835,6 @@
             <element signature="e#16218#16363#0#PHP" />
             <element signature="e#16598#16708#0#PHP" />
             <element signature="e#17325#17509#0#PHP" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppBundle/Command/GocStartGameServerCommand.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="41" column="1" lean-forward="true" selection-start-line="41" selection-start-column="1" selection-end-line="41" selection-end-column="1" />
-          <folding>
-            <element signature="e#37#68#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
