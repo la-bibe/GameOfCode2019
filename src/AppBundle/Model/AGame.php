@@ -21,15 +21,27 @@ abstract class AGame
      */
     private $tournament;
 
+    /**
+     * @var array
+     */
+    private $seed;
+
     public function __construct(Tournament $tournament)
     {
         $this->tournament = $tournament;
+        $this->seed = static::generateSeed();
     }
 
     abstract protected function checkPropositionData(array $data): bool;
 
-    abstract protected function getName(): string;
-    abstract protected function getSeed(): array;
+    abstract protected static function getName(): string;
+
+    abstract protected static function generateSeed(): array;
+
+    public function getSeed()
+    {
+        return $this->seed;
+    }
 
     private function finishPropositions()
     {
@@ -42,7 +54,7 @@ abstract class AGame
     public function getData(): array
     {
         return [
-            'name' => $this->getName(),
+            'name' => static::getName(),
             'seed' => $this->getSeed(),
         ];
     }

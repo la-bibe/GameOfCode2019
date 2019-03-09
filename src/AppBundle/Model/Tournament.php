@@ -14,8 +14,17 @@ use Ratchet\ConnectionInterface;
 class Tournament
 {
     public static $STATE_LOUNGE = 0;
+
     public static $STATE_IN_GAME = 1;
+
     public static $STATE_VOTE = 2;
+
+    public static $LOG_LEVEL_TRACE = 0;
+    public static $LOG_LEVEL_DEBUG = 1;
+    public static $LOG_LEVEL_INFO = 2;
+    public static $LOG_LEVEL_WARNING = 3;
+    public static $LOG_LEVEL_ERROR = 4;
+    public static $LOG_LEVEL_FATAL = 5;
 
     /**
      * @var AGame
@@ -57,8 +66,15 @@ class Tournament
      */
     private $currentRound;
 
-    public function __construct(int $size = 8, int $rounds = 3)
+    /**
+     * @var int
+     */
+    private $logLevel;
+
+    public function __construct(int $size = 8, int $rounds = 3, int $logLevel = null)
     {
+        if (is_null($logLevel))
+            $logLevel = self::$LOG_LEVEL_INFO;
         $this->size = $size;
         $this->players = [];
         $this->voters = [];
@@ -66,11 +82,42 @@ class Tournament
         $this->state = self::$STATE_LOUNGE;
         $this->rounds = $rounds;
         $this->currentRound = 0;
+        $this->logLevel = $logLevel;
+    }
+
+    private function log(string $text, int $logLevel = null)
+    {
+        if (is_null($logLevel))
+            $logLevel = static::$LOG_LEVEL_DEBUG;
+        if ($logLevel < $this->logLevel)
+            return;
+        switch ($logLevel) {
+            case self::$LOG_LEVEL_TRACE:
+                echo "\e[96m\e[2m";
+                break;
+            case self::$LOG_LEVEL_DEBUG:
+                echo "\e[96m";
+                break;
+            case self::$LOG_LEVEL_INFO:
+                echo "\e[92m";
+                break;
+            case self::$LOG_LEVEL_WARNING:
+                echo "\e[93m";
+                break;
+            case self::$LOG_LEVEL_ERROR:
+                echo "\e[91m\e[1m";
+                break;
+            case self::$LOG_LEVEL_FATAL:
+                echo "\e[91m";
+                break;
+        }
+        echo date('Y/m/d H:i:s') . ' - ' . $text . "\e[0m\e[39m\n";
     }
 
     private function notify(SocketEvent $event)
     {
         $raw = $event->getRawJson();
+        $this->log("Sending \"$raw\" to all clients");
         foreach ($this->players as $player)
             $player->send($raw);
         foreach ($this->voters as $voter)
@@ -99,6 +146,7 @@ class Tournament
 
     private function sendMessageTo(int $id, string $message): bool
     {
+        $this->log("Sending \"$message\" to $id");
         if ($this->isClient($id))
             $this->clients[$id]->send($message);
         else if ($this->isPlayer($id))
@@ -122,6 +170,7 @@ class Tournament
 
     private function endOfTournament()
     {
+        $this->log("End of tournament", self::$LOG_LEVEL_INFO);
         $this->notifyUpdatePlayersRanking(true);
         $this->reset();
     }
@@ -129,12 +178,19 @@ class Tournament
     private function launchNextGame()
     {
         $this->currentRound += 1;
-        if ($this->currentRound > $this->rounds) {
+        if ($this->currentRound > $this->rounds)
             $this->endOfTournament();
-        } else {
+        else {
             $this->resetAllClientsActions();
-            // TODO launch
-            $this->changeState(self::$STATE_IN_GAME);
+//            $this->game = GameFactory::getRandomGame($this);
+            $this->game = GameFactory::getIndexedGame($this->currentRound - 1, $this);
+            if (is_null($this->game))
+                $this->endOfTournament();
+            else {
+                $this->log("Launching new game (round $this->currentRound / $this->rounds)", self::$LOG_LEVEL_INFO);
+                $this->notify(new SocketEvent('launchGame', $this->game->getData()));
+                $this->changeState(self::$STATE_IN_GAME);
+            }
         }
     }
 
@@ -230,6 +286,7 @@ class Tournament
     public function addConnection(ConnectionInterface $connection)
     {
         $id = $this->getConnectionId($connection);
+        $this->log("New connection $id received");
         $this->clients[$id] = new Client($connection);
         $this->welcomeConnection($id);
     }
@@ -423,11 +480,13 @@ class Tournament
         try {
             $event = new SocketEvent($message);
         } catch (\InvalidArgumentException $e) {
+            $this->log("Got invalid event from $id");
             $error = new SocketErrorEvent($e->getMessage());
             $this->sendMessageTo($id, $error->getRawJson());
 
             return;
         }
+        $this->log("Got \"$message\" from $id");
         if ($this->isClient($id))
             $this->handleClientEvent($id, $event);
         else
@@ -464,6 +523,7 @@ class Tournament
     public function close(ConnectionInterface $connection)
     {
         $id = $this->getConnectionId($connection);
+        $this->log("Close connection to $id");
         if ($this->isClient($id))
             unset($this->clients[$id]);
         else if ($this->isPlayer($id))

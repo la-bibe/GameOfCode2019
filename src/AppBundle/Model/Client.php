@@ -13,6 +13,40 @@ use Ratchet\ConnectionInterface;
 
 class Client
 {
+    private static $FIRST_NAMES = [
+        'Beautiful',
+        'Efficient',
+        'Sudden',
+        'Demonic',
+        'Temporary',
+        'Expensive',
+        'Drunk',
+        'Ordinary',
+        'Extraordinary',
+        'Sticky',
+        'Evanescent',
+        'Scary',
+        'Cute',
+        'Brainy',
+        'Stormy',
+    ];
+
+    private static $LAST_NAMES = [
+        'Rainbow',
+        'Unicorn',
+        'Poney',
+        'Bear',
+        'Tiger',
+        'Cow',
+        'Bull',
+        'Cat',
+        'Cheese',
+        'Kitty',
+        'Cherry',
+        'Window',
+        'Crab',
+    ];
+
     /**
      * @var ConnectionInterface
      */
@@ -42,15 +76,19 @@ class Client
     {
         $this->connection = $connection;
         $this->game = null;
-        $this->name = $this->generateRandomName();
+        $this->name = static::generateRandomName();
         $this->actionDone = false;
         $this->points = 0;
     }
 
-    private function generateRandomName()
+    private static function getRandomElement(array $arr)
     {
-//        TODO
-        return 'aled';
+        return $arr[array_rand($arr)];
+    }
+
+    private static function generateRandomName()
+    {
+        return static::getRandomElement(static::$FIRST_NAMES) . ' ' . static::getRandomElement(static::$LAST_NAMES);
     }
 
     public function send(string $text)
