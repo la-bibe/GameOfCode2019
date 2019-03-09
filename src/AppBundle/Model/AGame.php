@@ -102,12 +102,11 @@ abstract class AGame
 
     public function dropPlayer(Client $player)
     {
-//        for ($i = 0; $i < count($this->propositions); $i++)
-//            if ($this->propositions[$i]->getPlayer() === $player) {
-//                unset($this->propositions[$i]);
-//                return;
-//            }
-//        TODO ?
+        for ($i = 0; $i < count($this->propositions); $i++)
+            if ($this->propositions[$i]->getPlayer() === $player) {
+                unset($this->propositions[$i]);
+                return;
+            }
     }
 
     public function vote(int $id)
