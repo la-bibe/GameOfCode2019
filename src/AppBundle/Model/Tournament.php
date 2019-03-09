@@ -143,12 +143,13 @@ class Tournament
         echo date('Y/m/d H:i:s') . ' - ' . $text . "\e[0m\e[39m\n";
     }
 
-    private function notify(SocketEvent $event)
+    private function notify(SocketEvent $event, bool $players = true)
     {
         $raw = $event->getRawJson();
         $this->log("Sending \"$raw\" to all clients", self::$LOG_LEVEL_TRACE);
-        foreach ($this->players as $player)
-            $player->send($raw);
+        if ($players)
+            foreach ($this->players as $player)
+                $player->send($raw);
         foreach ($this->voters as $voter)
             $voter->send($raw);
         foreach ($this->clients as $client)
@@ -559,10 +560,19 @@ class Tournament
         return $this->size;
     }
 
+    public function notifyPropositions()
+    {
+        $this->notify(new SocketEvent('propositions', $this->game->getPropositionsVoteData()), false);
+        foreach ($this->players as $player) {
+            $event = new SocketEvent('propositions', $this->game->getPropositionsVoteDataExceptPlayer($player));
+            $this->sendMessageTo($player->getId(), $event->getRawJson());
+        }
+    }
+
     public function finishPropositions()
     {
         $this->changeState(self::$STATE_VOTE);
-        $this->notify(new SocketEvent('propositions', $this->game->getPropositionsVoteData()));
+        $this->notifyPropositions();
         $this->timeLeft = $this->timeToVote;
         $this->notifyTimeLeft();
         $this->resetAllClientsActions();

@@ -82,6 +82,15 @@ abstract class AGame
         return $data;
     }
 
+    public function getPropositionsVoteDataExceptPlayer(Client $player)
+    {
+        $data = [];
+        foreach ($this->propositions as $proposition)
+            if ($proposition->getPlayer() !== $player)
+                $data[] = $proposition->getVoteData();
+        return $data;
+    }
+
     public function getVoteResults()
     {
         $data = [];
