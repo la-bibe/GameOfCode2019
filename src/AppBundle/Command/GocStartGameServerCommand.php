@@ -22,7 +22,8 @@ class GocStartGameServerCommand extends ContainerAwareCommand
             ->addArgument('host', InputArgument::REQUIRED, 'Host address')
             ->addArgument('port', InputArgument::REQUIRED, 'Port to run the server')
             ->addArgument('players', InputArgument::REQUIRED, 'Number of players per tournament')
-        ;
+            ->addArgument('gameDuration', InputArgument::REQUIRED, 'Duration of each round')
+            ->addArgument('voteDuration', InputArgument::REQUIRED, 'Duration of elections');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -35,7 +36,8 @@ class GocStartGameServerCommand extends ContainerAwareCommand
             ),
             intval($input->getArgument('port')),
             $input->getArgument('host'));
-        $tournament = Tournament::getInstance(intval($input->getArgument('players')));
+        $tournament = Tournament::getInstance(intval($input->getArgument('players')), 3, null,
+            intval($input->getArgument('gameDuration')), intval($input->getArgument('voteDuration')));
         $server->loop->addPeriodicTimer(1, [$tournament, 'update']);
         $server->run();
     }
