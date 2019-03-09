@@ -28,11 +28,17 @@ class Client
      */
     private $name;
 
+    /**
+     * @var bool
+     */
+    private $actionDone;
+
     public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
         $this->game = null;
         $this->name = $this->generateRandomName();
+        $this->actionDone = false;
     }
 
     private function generateRandomName()
@@ -80,5 +86,20 @@ class Client
     public function getName()
     {
         return $this->name;
+    }
+
+    public function reset()
+    {
+        $this->actionDone = false;
+    }
+
+    public function act()
+    {
+        $this->actionDone = true;
+    }
+
+    public function canAct()
+    {
+        return !$this->actionDone;
     }
 }

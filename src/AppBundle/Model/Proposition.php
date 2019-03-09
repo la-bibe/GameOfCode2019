@@ -114,4 +114,14 @@ class Proposition
             'proposition' => $this->getProposition(),
         ];
     }
+
+    public function getResultData()
+    {
+        return [
+            'id' => $this->getId(),
+            'proposition' => $this->getProposition(),
+            'votes' => $this->getVotes(),
+            'player' => $this->getPlayer()->getData(),
+        ];
+    }
 }

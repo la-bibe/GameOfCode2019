@@ -9,7 +9,7 @@
 namespace AppBundle\Model;
 
 
-class AGame
+abstract class AGame
 {
     protected static $name = '';
 
@@ -45,9 +45,18 @@ class AGame
         return $data;
     }
 
+    abstract protected function checkPropositionData(array $data): bool;
+
     public function addProposition(Client $player, array $data)
     {
+        if (!$this->checkPropositionData($data))
+            return false;
         $this->propositions[] = new Proposition($player, $data);
+        return true;
+    }
+
+    public function checkEndPropositions()
+    {
         if (count($this->propositions) == count($this->tournament->getPlayers()))
             $this->finishPropositions();
     }
@@ -60,6 +69,14 @@ class AGame
         return $data;
     }
 
+    public function getVoteResults()
+    {
+        $data = [];
+        foreach ($this->propositions as $proposition)
+            $data[] = $proposition->getResultData();
+        return $data;
+    }
+
     public function dropPlayer(Client $player)
     {
 //        for ($i = 0; $i < count($this->propositions); $i++)
@@ -68,5 +85,10 @@ class AGame
 //                return;
 //            }
 //        TODO
+    }
+
+    public function vote(int $id)
+    {
+        $this->propositions[$id]->addVote();
     }
 }

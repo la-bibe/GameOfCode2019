@@ -10,6 +10,7 @@ namespace AppBundle\Model;
 
 
 use Ratchet\ConnectionInterface;
+use Symfony\Bundle\FrameworkBundle\Tests\Functional\Bundle\TestBundle\Controller\FragmentController;
 
 class Tournament
 {
@@ -81,26 +82,28 @@ class Tournament
     {
         if (isset($connection->resourceId))
             return $connection->resourceId;
+
         return 0;
     }
 
-    private function sendMessageTo(int $id, $message) : bool
+    private function sendMessageTo(int $id, string $message): bool
     {
         if ($this->isClient($id))
             $this->clients[$id]->send($message);
-        elseif ($this->isPlayer($id))
+        else if ($this->isPlayer($id))
             $this->players[$id]->send($message);
-        elseif ($this->isVoter($id))
+        else if ($this->isVoter($id))
             $this->voters[$id]->send($message);
         else
             return false;
+
         return true;
     }
 
     private function welcomeConnection(int $id)
     {
         $event = new SocketEvent('welcome', [
-            'self' => $id,
+            'self' => $this->clients[$id]->getData(),
             'tournament' => $this->getData(),
         ]);
         $this->sendMessageTo($id, $event->getRawJson());
@@ -108,7 +111,9 @@ class Tournament
 
     private function launchNextGame()
     {
-        // TODO
+        $this->resetAllClientsActions();
+        // TODO check if next game + launch
+        $this->changeState(self::$STATE_IN_GAME);
     }
 
     private function getState()
@@ -121,7 +126,18 @@ class Tournament
             case self::$STATE_VOTE:
                 return 'vote';
         }
+
         return '';
+    }
+
+    private function resetAllClientsActions()
+    {
+        foreach ($this->clients as $client)
+            $client->reset();
+        foreach ($this->players as $player)
+            $player->reset();
+        foreach ($this->voters as $voter)
+            $voter->reset();
     }
 
     public function getData(): array
@@ -132,17 +148,18 @@ class Tournament
             'game' => [is_null($this->game) ? null : $this->game->getData()],
             'players' => [
                 'size' => count($this->players),
-                'data' => []
+                'data' => [],
             ],
             'voters' => [
                 'size' => count($this->voters),
-                'data' => []
-            ]
+                'data' => [],
+            ],
         ];
         foreach ($this->players as $player)
             $data['players']['data'][] = $player->getData();
         foreach ($this->voters as $voter)
             $data['voters']['data'][] = $voter->getData();
+
         return $data;
     }
 
@@ -176,6 +193,18 @@ class Tournament
         return array_key_exists($id, $this->clients);
     }
 
+    public function getAnyClient(int $id)
+    {
+        if ($this->isClient($id))
+            return $this->clients[$id];
+        if ($this->isPlayer($id))
+            return $this->players[$id];
+        if ($this->isVoter($id))
+            return $this->voters[$id];
+
+        return null;
+    }
+
     public function addConnection(ConnectionInterface $connection)
     {
         $id = $this->getConnectionId($connection);
@@ -188,11 +217,13 @@ class Tournament
         if ($this->state != self::$STATE_LOUNGE) {
             $error = new SocketErrorEvent('Tournament is already launched, please wait for it to be in lounge mode');
             $this->sendMessageTo($id, $error->getRawJson());
+
             return;
         }
         if ($this->isFull()) {
             $error = new SocketErrorEvent('Tournament is full, please join voters instead');
             $this->sendMessageTo($id, $error->getRawJson());
+
             return;
         }
         $this->players[$id] = $this->clients[$id];
@@ -226,22 +257,116 @@ class Tournament
 
     private function handlePlayerEvent(int $id, SocketEvent $event)
     {
+        if (!$this->players[$id]->canAct()) {
+            $error = new SocketErrorEvent('You have already played, wait for the next round');
+            $this->sendMessageTo($id, $error->getRawJson());
+
+            return;
+        }
         if ($this->state != self::$STATE_IN_GAME) {
             $error = new SocketErrorEvent('Wait for game state to play');
             $this->sendMessageTo($id, $error->getRawJson());
+
             return;
         }
-        // TODO
+        if ($event->getType() != 'play') {
+            $error = new SocketErrorEvent('Unknown event type from player');
+            $this->sendMessageTo($id, $error->getRawJson());
+
+            return;
+        }
+        if (array_key_exists('data', $event->getPayload())) {
+            $data = $event->getPayload()['data'];
+            if (is_array($data)) {
+                $player = $this->players[$id];
+                if ($this->game->addProposition($player, $data)) {
+                    $this->notify(new SocketEvent('playerAnswered', ['player' => $player->getData()]));
+                    $player->act();
+                    $this->game->checkEndPropositions();
+                } else {
+                    $error = new SocketErrorEvent('Wrong format for proposition');
+                    $player->send($error->getRawJson());
+                }
+
+                return;
+            }
+        }
+        $error = new SocketErrorEvent('Incorrect json');
+        $this->sendMessageTo($id, $error->getRawJson());
+    }
+
+    private function checkEndOfVote()
+    {
+        foreach ($this->voters as $voter)
+            if ($voter->canAct())
+                return;
+        $results = $this->game->getVoteResults();
+        $this->notify(new SocketEvent('voteResult', $results));
+        // TODO win player
+        $this->launchNextGame();
     }
 
     private function handleVoterEvent(int $id, SocketEvent $event)
     {
+        if (!$this->voters[$id]->canAct()) {
+            $error = new SocketErrorEvent('You have already voted, wait for the next round');
+            $this->sendMessageTo($id, $error->getRawJson());
+
+            return;
+        }
         if ($this->state != self::$STATE_VOTE) {
             $error = new SocketErrorEvent('Wait for vote state to vote');
             $this->sendMessageTo($id, $error->getRawJson());
+
             return;
         }
-        // TODO
+        if ($event->getType() != 'vote') {
+            $error = new SocketErrorEvent('Unknown event type from voter');
+            $this->sendMessageTo($id, $error->getRawJson());
+
+            return;
+        }
+        if (array_key_exists('id', $event->getPayload())) {
+            $propositionId = $event->getPayload()['id'];
+            if (is_numeric($propositionId)) {
+                $this->game->vote($propositionId);
+                $this->voters[$id]->act();
+                $this->notify(new SocketEvent('addVote', ['id' => $propositionId]));
+                $this->checkEndOfVote();
+
+                return;
+            }
+        }
+        $error = new SocketErrorEvent('Incorrect json');
+        $this->sendMessageTo($id, $error->getRawJson());
+    }
+
+    private function handleChatMessage(int $id, SocketEvent $event)
+    {
+        $from = $this->getAnyClient($id);
+        if (array_key_exists('message', $event->getPayload())) {
+            $message = $event->getPayload()['message'];
+            if (is_string($message)) {
+                $this->notify(new SocketEvent('message', [
+                    'from' => is_null($from) ? null : $from->getData(),
+                    'message' => $message,
+                ]));
+
+                return;
+            }
+        }
+        $error = new SocketErrorEvent('Incorrect json');
+        $this->sendMessageTo($id, $error->getRawJson());
+    }
+
+    private function handleLoggedClientEvent(int $id, SocketEvent $event)
+    {
+        if ($event->getType() == 'message')
+            $this->handleChatMessage($id, $event);
+        else if ($this->isPlayer($id))
+            $this->handlePlayerEvent($id, $event);
+        else if ($this->isVoter($id))
+            $this->handleVoterEvent($id, $event);
     }
 
     private function changeState(int $state)
@@ -258,14 +383,13 @@ class Tournament
         } catch (\InvalidArgumentException $e) {
             $error = new SocketErrorEvent($e->getMessage());
             $this->sendMessageTo($id, $error->getRawJson());
+
             return;
         }
         if ($this->isClient($id))
             $this->handleClientEvent($id, $event);
-        elseif ($this->isPlayer($id))
-            $this->handlePlayerEvent($id, $event);
-        elseif ($this->isVoter($id))
-            $this->handleVoterEvent($id, $event);
+        else
+            $this->handleLoggedClientEvent($id, $event);
     }
 
     /**
@@ -289,7 +413,6 @@ class Tournament
         $event = new SocketEvent('playerLeave', $this->players[$id]->getData());
         unset($this->players[$id]);
         $this->notify($event);
-        // TODO
     }
 
     private function dropVoter(int $id)
@@ -304,11 +427,11 @@ class Tournament
         $id = $this->getConnectionId($connection);
         if ($this->isClient($id))
             unset($this->clients[$id]);
-        elseif ($this->isPlayer($id))
+        else if ($this->isPlayer($id))
             $this->dropPlayer($id);
-        elseif ($this->isVoter($id))
+        else if ($this->isVoter($id))
             $this->dropVoter($id);
     }
 
-    // TODO Log everything
+    // TODO Log everything + time to play + vote
 }
