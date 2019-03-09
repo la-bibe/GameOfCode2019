@@ -11,12 +11,14 @@ namespace AppBundle\Model;
 
 use AppBundle\Model\Games\BoardGame;
 use AppBundle\Model\Games\FashionGame;
+use AppBundle\Model\Games\MountainGame;
 
 class GameFactory
 {
     private static $GAMES = [
         'fashion',
         'board',
+        'mountain',
     ];
 
     private static function getGame(string $name, Tournament $tournament): ?AGame
@@ -26,6 +28,8 @@ class GameFactory
                 return new FashionGame($tournament);
             case 'board':
                 return new BoardGame($tournament);
+            case 'mountain':
+                return new MountainGame($tournament);
             default:
                 return null;
         }

@@ -13,6 +13,21 @@ use AppBundle\Model\AGame;
 
 class BoardGame extends AGame
 {
+    private static $WORDS = [
+        'bubble',
+        'dog',
+        'volcano',
+        'watch',
+        'tomato',
+        'earth',
+        'church',
+        'fish',
+        'horse',
+        'key',
+        'cake',
+        'cat',
+    ];
+
     protected function checkPropositionData(array $data): bool
     {
         return true;
@@ -25,6 +40,8 @@ class BoardGame extends AGame
 
     protected static function generateSeed(): array
     {
-        return [];
+        return [
+            'word' => self::$WORDS[array_rand(self::$WORDS)],
+        ];
     }
 }
