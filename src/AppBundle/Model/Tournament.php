@@ -52,6 +52,11 @@ class Tournament
      */
     private $rounds;
 
+    /**
+     * @var int
+     */
+    private $currentRound;
+
     public function __construct(int $size = 8, int $rounds = 3)
     {
         $this->size = $size;
@@ -60,6 +65,7 @@ class Tournament
         $this->clients = [];
         $this->state = self::$STATE_LOUNGE;
         $this->rounds = $rounds;
+        $this->currentRound = 0;
     }
 
     private function notify(SocketEvent $event)
@@ -114,11 +120,22 @@ class Tournament
         $this->sendMessageTo($id, $event->getRawJson());
     }
 
+    private function endOfTournament()
+    {
+        $this->notifyUpdatePlayersRanking(true);
+        $this->reset();
+    }
+
     private function launchNextGame()
     {
-        $this->resetAllClientsActions();
-        // TODO check if next game + launch
-        $this->changeState(self::$STATE_IN_GAME);
+        $this->currentRound += 1;
+        if ($this->currentRound > $this->rounds) {
+            $this->endOfTournament();
+        } else {
+            $this->resetAllClientsActions();
+            // TODO launch
+            $this->changeState(self::$STATE_IN_GAME);
+        }
     }
 
     private function getState()
@@ -300,9 +317,17 @@ class Tournament
         $this->sendMessageTo($id, $error->getRawJson());
     }
 
+    private function notifyUpdatePlayersRanking(bool $end = false)
+    {
+        $players = [];
+        foreach ($this->players as $player)
+            $players[] = $player->getData();
+        usort($players, ['Client', 'compare']);
+        $this->notify(new SocketEvent($end ? 'finalPlayerRanking' : 'updatePlayerRanking', $players));
+    }
+
     private function getWonPointsFromRank(int $rank)
     {
-        // TODO
         return (4 - $rank) * 5;
     }
 
@@ -319,6 +344,7 @@ class Tournament
                 break;
             elseif ($result instanceof Proposition)
                 $result->getPlayer()->addPoints($this->getWonPointsFromRank($i++));
+        $this->notifyUpdatePlayersRanking();
         $this->launchNextGame();
     }
 
@@ -448,8 +474,18 @@ class Tournament
 
     private function reset()
     {
-        // TODO
+        $this->notify(new SocketEvent('resetClient', []));
+        $this->changeState(static::$STATE_LOUNGE);
+        foreach ($this->players as $id => $player)
+            $this->clients[$id] = $player;
+        foreach ($this->voters as $id => $voter)
+            $this->clients[$id] = $voter;
+        $this->players = [];
+        $this->voters = [];
+        foreach ($this->clients as $client)
+            $client->reset();
+        $this->currentRound = 0;
     }
 
-    // TODO Log everything + time to play and vote
+    // TODO Log everything + time to play and vote + adjust points ?
 }

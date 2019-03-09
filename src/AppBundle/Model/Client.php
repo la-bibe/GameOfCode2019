@@ -86,6 +86,7 @@ class Client
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
+            'points' => $this->getPoints(),
         ];
     }
 
@@ -102,6 +103,7 @@ class Client
     public function reset()
     {
         $this->points = 0;
+        $this->resetAction();
     }
 
     public function act()
@@ -114,7 +116,7 @@ class Client
         return !$this->actionDone;
     }
 
-    public function getPoint()
+    public function getPoints()
     {
         return $this->points;
     }
@@ -122,5 +124,12 @@ class Client
     public function addPoints(int $points)
     {
         $this->points += $points;
+    }
+
+    public static function compare(array $a, array $b)
+    {
+        if ($a['points'] == $a['points'])
+            return 0;
+        return $a['points'] > $b['points'] ? 1 : -1;
     }
 }

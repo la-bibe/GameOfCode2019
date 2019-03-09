@@ -9,12 +9,8 @@
 namespace AppBundle\Model;
 
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 abstract class AGame
 {
-    protected static $name = '';
-
     /**
      * @var Proposition[]
      */
@@ -30,6 +26,11 @@ abstract class AGame
         $this->tournament = $tournament;
     }
 
+    abstract protected function checkPropositionData(array $data): bool;
+
+    abstract protected function getName(): string;
+    abstract protected function getSeed(): array;
+
     private function finishPropositions()
     {
         shuffle($this->propositions);
@@ -40,14 +41,11 @@ abstract class AGame
 
     public function getData(): array
     {
-        $data = [
-            'name' => static::$name,
+        return [
+            'name' => $this->getName(),
+            'seed' => $this->getSeed(),
         ];
-        // TODO
-        return $data;
     }
-
-    abstract protected function checkPropositionData(array $data): bool;
 
     public function addProposition(Client $player, array $data)
     {
@@ -87,7 +85,7 @@ abstract class AGame
 //                unset($this->propositions[$i]);
 //                return;
 //            }
-//        TODO
+//        TODO ?
     }
 
     public function vote(int $id)

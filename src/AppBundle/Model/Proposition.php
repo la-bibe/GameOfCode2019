@@ -125,10 +125,10 @@ class Proposition
         ];
     }
 
-    public static function compare(Proposition $a, Proposition $b)
+    public static function compare(array $a, array $b)
     {
-        if ($a->getVotes() == $b->getVotes())
+        if ($a['votes'] == $b['votes'])
             return 0;
-        return $a->getVotes() > $b->getVotes() ? 1 : -1;
+        return $a['votes'] > $b['votes'] ? 1 : -1;
     }
 }
