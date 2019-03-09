@@ -28,6 +28,8 @@ class GocStartGameServerCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $tournament = Tournament::getInstance(intval($input->getArgument('players')), 3, null,
+            intval($input->getArgument('gameDuration')), intval($input->getArgument('voteDuration')));
         $server = IoServer::factory(
             new HttpServer(
                 new WsServer(
@@ -36,8 +38,6 @@ class GocStartGameServerCommand extends ContainerAwareCommand
             ),
             intval($input->getArgument('port')),
             $input->getArgument('host'));
-        $tournament = Tournament::getInstance(intval($input->getArgument('players')), 3, null,
-            intval($input->getArgument('gameDuration')), intval($input->getArgument('voteDuration')));
         $server->loop->addPeriodicTimer(1, [$tournament, 'update']);
         $server->run();
     }
