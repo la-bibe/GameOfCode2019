@@ -3,7 +3,9 @@
 namespace AppBundle\Command;
 
 use AppBundle\Server\GameServer;
+use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
+use Ratchet\WebSocket\WsServer;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,9 +22,13 @@ class GocStartGameServerCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $server = IoServer::factory(
-            new GameServer(),
+            new HttpServer(
+                new WsServer(
+                    new GameServer()
+                )
+            ),
             8080,
-            '192.168.195.227');
+            '192.168.43.78');
         $server->run();
     }
 }

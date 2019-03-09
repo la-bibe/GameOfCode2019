@@ -11,7 +11,7 @@ namespace AppBundle\Model;
 
 use Ratchet\ConnectionInterface;
 
-class AClient
+class Client
 {
     /**
      * @var ConnectionInterface
@@ -23,10 +23,22 @@ class AClient
      */
     private $game;
 
+    /**
+     * @var string
+     */
+    private $name;
+
     public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
         $this->game = null;
+        $this->name = $this->generateRandomName();
+    }
+
+    private function generateRandomName()
+    {
+//        TODO
+        return 'aled';
     }
 
     public function send(string $text)
@@ -34,9 +46,16 @@ class AClient
         $this->connection->send($text);
     }
 
+    private function getConnectionId(ConnectionInterface $connection)
+    {
+        if (isset($connection->resourceId))
+            return $connection->resourceId;
+        return 0;
+    }
+
     public function getId()
     {
-        return $this->connection->resourceId;
+        return $this->getConnectionId($this->connection);
     }
 
     public function getConnection(): ConnectionInterface
@@ -47,6 +66,19 @@ class AClient
     public function setGame(AGame $game)
     {
         $this->game = $game;
-        $this->send($this->game->getFirstData());
+//        $this->send($this->game->getData()); TODO
+    }
+
+    public function getData()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+        ];
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 }
